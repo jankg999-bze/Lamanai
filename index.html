@@ -1,85 +1,928 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tayrealm Dice Oracle</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pok Ta Pok</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Fondamento&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Fondamento&display=swap" rel="stylesheet">
 
-<style>
-body {
-  margin: 0;
-  font-family: 'Fondamento', cursive;
-  color: white;
-  text-align: center;
-  background: linear-gradient(to bottom, #1a1a2e, #0f0f1a);
-}
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-.container {
-  margin-top: 15vh;
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-h1 {
-  font-size: 3rem;
-  text-shadow: 2px 2px 8px black;
-}
+    body {
+      margin: 0;
+      color: #f7ead2;
+      font-family: 'Fondamento', cursive;
+      background: #0f0a07;
+      overflow-x: hidden;
+    }
 
-input {
-  padding: 10px;
-  font-size: 1.2rem;
-  width: 80px;
-  margin: 10px;
-  border-radius: 10px;
-  border: none;
-}
+    :root {
+      --gold-1: #fff0c8;
+      --gold-2: #e6c27a;
+      --gold-3: #ba8742;
+      --line: rgba(241, 211, 150, 0.28);
+      --good: #42d66a;
+      --bad: #e74a4a;
+      --glow: rgba(255, 213, 120, 0.18);
+      --panel: rgba(22, 12, 7, 0.84);
+    }
 
-button {
-  padding: 12px 20px;
-  font-size: 1.2rem;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  background: #6b3fa0;
-  color: white;
-}
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
 
-.result {
-  font-size: 3rem;
-  margin-top: 20px;
-}
-</style>
+    .ptk-site {
+      min-height: 100vh;
+      background:
+        linear-gradient(rgba(7, 4, 2, 0.38), rgba(7, 4, 2, 0.72)),
+        url('https://i.pinimg.com/736x/e8/9b/06/e89b064afa3eba3274049bc8c1b5c77c.jpg') center/cover no-repeat;
+    }
+
+    .ptk-hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px 90px;
+      text-align: center;
+      isolation: isolate;
+    }
+
+    .ptk-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 35%, rgba(255, 210, 120, 0.16), transparent 32%),
+        linear-gradient(to bottom, rgba(0,0,0,0.10), rgba(0,0,0,0.55));
+      z-index: -2;
+    }
+
+    .ptk-hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,0.02) 0,
+          rgba(255,255,255,0.02) 1px,
+          transparent 1px,
+          transparent 120px
+        );
+      opacity: 0.2;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .ptk-hero-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .ptk-noise {
+      position: absolute;
+      inset: 0;
+      opacity: 0.08;
+      background-image: radial-gradient(rgba(255,255,255,0.15) 0.6px, transparent 0.6px);
+      background-size: 7px 7px;
+      mix-blend-mode: soft-light;
+    }
+
+    .ptk-hero-content {
+      width: 100%;
+      max-width: 950px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .ptk-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: #d3b37a;
+      margin-bottom: 18px;
+      text-shadow: 0 0 10px rgba(0,0,0,0.75);
+    }
+
+    .ptk-hero-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.14em;
+      flex-wrap: wrap;
+      margin: 0 0 18px;
+      font-family: 'Cinzel', serif;
+      font-size: clamp(3rem, 8vw, 6.8rem);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-shadow:
+        0 0 12px var(--glow),
+        0 2px 10px rgba(0, 0, 0, 0.85),
+        0 10px 35px rgba(0, 0, 0, 0.75);
+    }
+
+    .ptk-title-pok,
+    .ptk-title-ta,
+    .ptk-title-pok2 {
+      display: inline-block;
+      background: linear-gradient(to bottom, var(--gold-1) 0%, var(--gold-2) 45%, var(--gold-3) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.55));
+    }
+
+    .ptk-title-ball {
+      width: 0.8em;
+      height: 0.8em;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transform: translateY(0.02em);
+      filter: drop-shadow(0 0 8px rgba(255, 208, 120, 0.35));
+      animation: ballFloat 2.4s ease-in-out infinite;
+    }
+
+    .ptk-ball-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .ptk-hero-sub {
+      margin: 0 auto 30px;
+      max-width: 680px;
+      font-size: clamp(1.1rem, 2vw, 1.55rem);
+      line-height: 1.4;
+      color: #f4e7cf;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.85);
+    }
+
+    .ptk-cta,
+    .secondary-btn,
+    .modal-btn {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 14px 30px;
+      border: 1px solid rgba(255, 225, 172, 0.35);
+      border-radius: 999px;
+      background: linear-gradient(to bottom, #7a5325, #533116);
+      color: #fff0d1;
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow:
+        0 6px 20px rgba(0,0,0,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.12);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease, opacity 0.18s ease;
+    }
+
+    .ptk-cta:hover,
+    .secondary-btn:hover,
+    .modal-btn:hover {
+      transform: translateY(-1px) scale(1.02);
+      filter: brightness(1.06);
+      box-shadow:
+        0 10px 24px rgba(0,0,0,0.42),
+        inset 0 1px 0 rgba(255,255,255,0.12);
+    }
+
+    .ptk-cta:disabled,
+    .secondary-btn:disabled,
+    .modal-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .secondary-btn {
+      background: rgba(78, 49, 23, 0.88);
+      padding: 13px 24px;
+      font-size: 0.95rem;
+    }
+
+    .ptk-hero-scroll {
+      position: absolute;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.85;
+    }
+
+    .ptk-scroll-text {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #e1c189;
+    }
+
+    .ptk-scroll-line {
+      width: 1px;
+      height: 52px;
+      background: linear-gradient(to bottom, rgba(255,225,172,0.9), rgba(255,225,172,0));
+      animation: drift 1.8s infinite ease-in-out;
+    }
+
+    .court-section {
+      min-height: 100vh;
+      position: relative;
+      padding: 40px 20px 70px;
+      background-color: #ececec;
+    }
+
+    .court-wrap {
+      max-width: 1500px;
+      margin: 0 auto;
+    }
+
+    .court-ui {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      min-height: 760px;
+      background-image: url('./Cerb.png');
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+
+    .match-score-box {
+      position: absolute;
+      top: 6%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 250px;
+      text-align: center;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 18px 18px 16px;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 10px 35px rgba(0,0,0,0.28);
+      z-index: 8;
+    }
+
+    .match-score-title {
+      font-family: 'Cinzel', serif;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.9rem;
+      color: #d3b37a;
+      margin-bottom: 8px;
+    }
+
+    .match-score-value {
+      font-family: 'Cinzel', serif;
+      font-size: 2.3rem;
+      color: #fff0d1;
+      margin-bottom: 6px;
+    }
+
+    .match-score-status {
+      font-size: 1.02rem;
+      color: #f4e7cf;
+      min-height: 2.8em;
+    }
+
+    .team-panel {
+      position: absolute;
+      width: 300px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 22px 22px 18px;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 10px 35px rgba(0,0,0,0.28);
+      z-index: 8;
+    }
+
+    .team-panel.left {
+      top: 18%;
+      left: 5.5%;
+    }
+
+    .team-panel.right {
+      top: 18%;
+      right: 5.5%;
+    }
+
+    .team-name {
+      font-family: 'Cinzel', serif;
+      font-size: 2rem;
+      color: #fff0d1;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .team-sub {
+      font-size: 1rem;
+      color: #f2e3c3;
+      margin-bottom: 18px;
+    }
+
+    .player-name-input,
+    .modifier-input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(233, 202, 142, 0.24);
+      background: rgba(255,255,255,0.94);
+      color: #2a170c;
+      font-size: 1rem;
+      font-family: 'Cinzel', serif;
+      margin-bottom: 12px;
+    }
+
+    .player-name-input:focus,
+    .modifier-input:focus {
+      outline: none;
+      border-color: rgba(255, 214, 140, 0.75);
+      box-shadow: 0 0 0 3px rgba(255, 214, 140, 0.15);
+    }
+
+    .court-roll-area {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+    }
+
+    .player-art {
+      position: absolute;
+      bottom: 16%;
+      width: 18%;
+      max-width: 250px;
+      min-width: 150px;
+      pointer-events: none;
+      z-index: 2;
+      filter: drop-shadow(0 18px 30px rgba(0,0,0,0.18));
+      opacity: 0.95;
+    }
+
+    .player-art.left {
+      left: 6%;
+    }
+
+    .player-art.right {
+      right: 6%;
+      transform: scaleX(-1);
+    }
+
+    .player-art img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    .court-side-readout {
+      position: absolute;
+      width: 240px;
+      text-align: center;
+      z-index: 6;
+    }
+
+    .court-side-readout.left {
+      left: 15%;
+      top: 57%;
+      transform: translate(-50%, -50%);
+    }
+
+    .court-side-readout.right {
+      right: 15%;
+      top: 57%;
+      transform: translate(50%, -50%);
+    }
+
+    .side-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.8rem;
+      color: #fff0d1;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      text-shadow: 0 3px 10px rgba(0,0,0,0.35);
+    }
+
+    .side-roll-wrap {
+      position: relative;
+      width: 168px;
+      height: 168px;
+      margin: 0 auto 10px;
+      display: grid;
+      place-items: center;
+    }
+
+    .roll-wheel {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 3px solid rgba(244, 217, 163, 0.55);
+      box-shadow:
+        0 0 0 10px rgba(255,255,255,0.03),
+        inset 0 0 20px rgba(255, 214, 120, 0.08);
+      opacity: 0.95;
+    }
+
+    .roll-wheel::before,
+    .roll-wheel::after {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border-radius: 50%;
+      border: 1px dashed rgba(244, 217, 163, 0.3);
+    }
+
+    .roll-wheel::after {
+      inset: 28px;
+    }
+
+    .roll-wheel.rolling {
+      animation: spinWheel 0.28s linear infinite;
+    }
+
+    .side-roll {
+      position: relative;
+      z-index: 1;
+      font-family: 'Cinzel', serif;
+      font-size: clamp(4rem, 7vw, 6rem);
+      font-weight: 800;
+      line-height: 1;
+      color: #ffe6ae;
+      text-shadow:
+        0 0 14px rgba(255, 214, 120, 0.22),
+        0 3px 12px rgba(0,0,0,0.55);
+      min-height: 1em;
+    }
+
+    .side-roll.rolling {
+      animation: flickerRoll 0.12s linear infinite;
+    }
+
+    .side-breakdown {
+      margin-top: 10px;
+      font-size: 1rem;
+      color: #fff1d5;
+      min-height: 2.5em;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    .nat-1 {
+      color: var(--bad);
+      text-shadow:
+        0 0 14px rgba(231, 74, 74, 0.28),
+        0 3px 12px rgba(0,0,0,0.55);
+    }
+
+    .nat-20 {
+      color: var(--good);
+      text-shadow:
+        0 0 14px rgba(66, 214, 106, 0.28),
+        0 3px 12px rgba(0,0,0,0.55);
+    }
+
+    .court-ball {
+      position: absolute;
+      width: 78px;
+      height: 78px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 7;
+      filter: drop-shadow(0 0 16px rgba(255, 208, 120, 0.35));
+      transition: left 0.9s ease, top 0.9s ease;
+    }
+
+    .court-ball-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .court-ball.to-left {
+      animation: bounceToLeft 1s ease;
+      left: 6.2%;
+      top: 50%;
+    }
+
+    .court-ball.to-right {
+      animation: bounceToRight 1s ease;
+      left: 93.8%;
+      top: 50%;
+    }
+
+    .court-ball.to-center {
+      animation: bounceCenter 0.9s ease;
+      left: 50%;
+      top: 50%;
+    }
+
+    .court-ball.idle-sway {
+      animation: ballSuspense 0.5s ease-in-out infinite alternate;
+    }
+
+    .history-panel {
+      position: absolute;
+      left: 50%;
+      bottom: 12%;
+      transform: translateX(-50%);
+      width: min(700px, 70%);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 16px 20px;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 10px 35px rgba(0,0,0,0.25);
+      z-index: 8;
+    }
+
+    .history-panel h4 {
+      margin: 0 0 10px;
+      font-family: 'Cinzel', serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #d3b37a;
+    }
+
+    .history-list {
+      margin: 0;
+      padding-left: 20px;
+      color: #f4e7cf;
+      max-height: 110px;
+      overflow: auto;
+    }
+
+    .history-list li {
+      margin-bottom: 6px;
+    }
+
+    .controls {
+      position: absolute;
+      left: 50%;
+      bottom: 3.5%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+      z-index: 8;
+    }
+
+    .winner-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 6, 4, 0.72);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 999;
+    }
+
+    .winner-modal.show {
+      display: flex;
+    }
+
+    .winner-card {
+      width: min(720px, 96vw);
+      background: rgba(22, 12, 7, 0.92);
+      border: 1px solid rgba(255, 225, 172, 0.28);
+      border-radius: 26px;
+      overflow: hidden;
+      box-shadow: 0 18px 60px rgba(0,0,0,0.48);
+      color: #fff0d1;
+    }
+
+    .winner-image-wrap {
+      width: 100%;
+      max-height: 520px;
+      background: #1a110c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .winner-image {
+      width: 100%;
+      max-height: 520px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .winner-content {
+      padding: 22px 24px 26px;
+      text-align: center;
+    }
+
+    .winner-content h3 {
+      margin: 0 0 10px;
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      text-transform: uppercase;
+      color: #f4d9a3;
+    }
+
+    .winner-content p {
+      margin: 0 0 18px;
+      font-size: 1.1rem;
+      color: #f4e7cf;
+    }
+
+    @keyframes drift {
+      0% { transform: translateY(0); opacity: 0.6; }
+      50% { transform: translateY(8px); opacity: 1; }
+      100% { transform: translateY(0); opacity: 0.6; }
+    }
+
+    @keyframes ballFloat {
+      0% { transform: translateY(0.02em); }
+      50% { transform: translateY(-0.18em); }
+      100% { transform: translateY(0.02em); }
+    }
+
+    @keyframes spinWheel {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes flickerRoll {
+      0% { transform: translateY(0px); opacity: 0.9; }
+      50% { transform: translateY(-1px); opacity: 1; }
+      100% { transform: translateY(1px); opacity: 0.9; }
+    }
+
+    @keyframes ballSuspense {
+      from { transform: translate(-50%, -50%) translateY(-4px); }
+      to   { transform: translate(-50%, -50%) translateY(4px); }
+    }
+
+    @keyframes bounceToLeft {
+      0%   { left: 50%; top: 50%; }
+      25%  { left: 34%; top: 43%; }
+      55%  { left: 14%; top: 56%; }
+      78%  { left: 6.2%; top: 46%; }
+      100% { left: 6.2%; top: 50%; }
+    }
+
+    @keyframes bounceToRight {
+      0%   { left: 50%; top: 50%; }
+      25%  { left: 66%; top: 43%; }
+      55%  { left: 86%; top: 56%; }
+      78%  { left: 93.8%; top: 46%; }
+      100% { left: 93.8%; top: 50%; }
+    }
+
+    @keyframes bounceCenter {
+      0%   { left: 50%; top: 50%; }
+      30%  { left: 50%; top: 42%; }
+      65%  { left: 50%; top: 57%; }
+      100% { left: 50%; top: 50%; }
+    }
+
+    @media (max-width: 1100px) {
+      .player-art {
+        width: 16%;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .court-ui {
+        aspect-ratio: auto;
+        min-height: auto;
+        background-size: contain;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        padding-top: 20px;
+      }
+
+      .match-score-box,
+      .team-panel,
+      .history-panel,
+      .controls,
+      .court-side-readout,
+      .court-ball,
+      .player-art {
+        position: static;
+        transform: none;
+        width: 100%;
+        max-width: none;
+      }
+
+      .court-roll-area {
+        position: static;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .player-art {
+        display: none;
+      }
+
+      .court-ball {
+        display: none;
+      }
+
+      .history-panel,
+      .controls {
+        order: 20;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="ptk-site">
+    <section class="ptk-hero">
+      <div class="ptk-hero-bg" aria-hidden="true">
+        <div class="ptk-noise"></div>
+      </div>
 
-<div class="container">
-  <h1>The Dice of Tayrealm</h1>
+      <div class="ptk-hero-content">
+        <div class="ptk-eyebrow">Since 1400 BCE</div>
 
-  <p>Choose your range:</p>
-  <input id="min" type="number" placeholder="Min">
-  <input id="max" type="number" placeholder="Max">
-  <br>
+        <h1 class="ptk-hero-title">
+          <span class="ptk-title-pok">Pok</span>
+          <span class="ptk-title-ball" aria-hidden="true">
+            <svg class="ptk-ball-svg" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="heroBallGlow" cx="50%" cy="40%" r="60%">
+                  <stop offset="0%" stop-color="#ffe9b8"/>
+                  <stop offset="60%" stop-color="#d4a85d"/>
+                  <stop offset="100%" stop-color="#8e5a22"/>
+                </radialGradient>
+              </defs>
+              <circle cx="40" cy="40" r="28" fill="url(#heroBallGlow)" stroke="#f7ddb0" stroke-width="2"/>
+              <circle cx="31" cy="29" r="7" fill="rgba(255,255,255,0.28)"/>
+            </svg>
+          </span>
+          <span class="ptk-title-ta">Ta</span>
+          <span class="ptk-title-pok2">Pok</span>
+        </h1>
 
-  <button onclick="roll()">Roll Fate</button>
+        <p class="ptk-hero-sub">Do you have what it takes.</p>
+        <a class="ptk-cta" href="#court">Enter the Court</a>
+      </div>
 
-  <div class="result" id="result">?</div>
-</div>
+      <div class="ptk-hero-scroll" aria-hidden="true">
+        <div class="ptk-scroll-text">Scroll</div>
+        <div class="ptk-scroll-line"></div>
+      </div>
+    </section>
+  </div>
 
-<script>
-function roll() {
-  let min = parseInt(document.getElementById("min").value);
-  let max = parseInt(document.getElementById("max").value);
+  <section class="court-section" id="court">
+    <div class="court-wrap">
+      <div class="court-ui">
 
-  if (isNaN(min) || isNaN(max) || min >= max) {
-    document.getElementById("result").textContent = "Invalid range";
-    return;
-  }
+        <div class="match-score-box">
+          <div class="match-score-title">Match Score</div>
+          <div class="match-score-value" id="scoreDisplay">0 - 0</div>
+          <div class="match-score-status" id="statusDisplay">Best of 3. First point stirs the court. Second point claims it.</div>
+        </div>
 
-  let num = Math.floor(Math.random() * (max - min + 1)) + min;
-  document.getElementById("result").textContent = num;
-}
-</script>
+        <div class="team-panel left">
+          <div class="team-name">Ixchel's Royal Team</div>
+          <div class="team-sub">The DM rolls 1d20 and always gains +5.</div>
+        </div>
 
-</body>
-</html>
+        <div class="team-panel right">
+          <div class="team-name" id="livePlayerName">Your Team</div>
+          <div class="team-sub">Enter your team name and any modifier before rolling.</div>
+          <input
+            class="player-name-input"
+            id="playerTeamName"
+            type="text"
+            maxlength="30"
+            placeholder="Enter your team name"
+          >
+          <input
+            class="modifier-input"
+            id="playerModifier"
+            type="number"
+            value="0"
+            placeholder="Player modifier"
+          >
+        </div>
+
+        <div class="court-roll-area">
+          <div class="player-art left" aria-hidden="true">
+            <img src="./ixchel-player.png" alt="">
+          </div>
+
+          <div class="player-art right" aria-hidden="true">
+            <img src="./player-side.png" alt="">
+          </div>
+
+          <div class="court-side-readout left">
+            <div class="side-title">Ixchel's Royal Team</div>
+            <div class="side-roll-wrap">
+              <div class="roll-wheel" id="dmWheel"></div>
+              <div class="side-roll" id="dmCourtRoll">-</div>
+            </div>
+            <div class="side-breakdown" id="dmCourtText">DM side awaits the first clash.</div>
+          </div>
+
+          <div class="court-side-readout right">
+            <div class="side-title" id="courtPlayerName">Your Team</div>
+            <div class="side-roll-wrap">
+              <div class="roll-wheel" id="playerWheel"></div>
+              <div class="side-roll" id="playerCourtRoll">-</div>
+            </div>
+            <div class="side-breakdown" id="playerCourtText">Player side awaits the first clash.</div>
+          </div>
+
+          <div class="court-ball to-center" id="courtBall" aria-hidden="true">
+            <svg class="court-ball-svg" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="courtBallGlow" cx="50%" cy="40%" r="60%">
+                  <stop offset="0%" stop-color="#ffe9b8"/>
+                  <stop offset="60%" stop-color="#d4a85d"/>
+                  <stop offset="100%" stop-color="#8e5a22"/>
+                </radialGradient>
+              </defs>
+              <circle cx="40" cy="40" r="28" fill="url(#courtBallGlow)" stroke="#f7ddb0" stroke-width="2"/>
+              <circle cx="31" cy="29" r="7" fill="rgba(255,255,255,0.28)"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="history-panel">
+          <h4>Round History</h4>
+          <ol class="history-list" id="historyList">
+            <li>The court is quiet. Roll to begin.</li>
+          </ol>
+        </div>
+
+        <div class="controls">
+          <button class="ptk-cta" id="playBtn" onclick="playRound()">Play Round</button>
+          <button class="secondary-btn" id="resetBtn" onclick="resetMatch()">Reset Match</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="winner-modal" id="winnerModal">
+    <div class="winner-card">
+      <div class="winner-image-wrap">
+        <img id="winnerImage" class="winner-image" src="" alt="Winner artwork">
+      </div>
+      <div class="winner-content">
+        <h3 id="winnerTitle">Victory</h3>
+        <p id="winnerMessage">A winner has been decided.</p>
+        <button class="modal-btn" onclick="resetMatch()">Reset Match</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let dmWins = 0;
+    let playerWins = 0;
+    let roundNumber = 0;
+    let matchOver = false;
+    let isRolling = false;
+
+    const scoreDisplay = document.getElementById("scoreDisplay");
+    const statusDisplay = document.getElementById("statusDisplay");
+    const playerTeamNameInput = document.getElementById("playerTeamName");
+    const livePlayerName = document.getElementById("livePlayerName");
+    const courtPlayerName = document.getElementById("courtPlayerName");
+    const playerModifierInput = document.getElementById("playerModifier");
+    const historyList = document.getElementById("historyList");
+    const courtBall = document.getElementById("courtBall");
+    const dmCourtRoll = document.getElementById("dmCourtRoll");
+    const playerCourtRoll = document.getElementById("playerCourtRoll");
+    const dmCourtText = document.getElementById("dmCourtText");
+    const playerCourtText = document.getElementById("playerCourtText");
+    const dmWheel = document.getElementById("dmWheel");
+    const playerWheel = document.getElementById("playerWheel");
+    const playBtn = document.getElementById("playBtn");
+    const resetBtn = document.getElementById("resetBtn");
+
+    const winnerModal = document.getElementById("winnerModal");
+    const winnerImage = document.getElementById("winnerImage");
+    const winnerTitle = document.getElementById("winnerTitle");
+    const winnerMessage = document.getElementById("
