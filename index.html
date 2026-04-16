@@ -28,11 +28,11 @@
       --gold-1: #fff0c8;
       --gold-2: #e6c27a;
       --gold-3: #ba8742;
-      --line: rgba(241, 211, 150, 0.28);
+      --line: rgba(210, 141, 73, 0.42);
       --good: #42d66a;
       --bad: #e74a4a;
       --glow: rgba(255, 213, 120, 0.18);
-      --panel: rgba(22, 12, 7, 0.84);
+      --panel: rgba(18, 9, 5, 0.92);
     }
 
     a {
@@ -251,7 +251,9 @@
       min-height: 100vh;
       position: relative;
       padding: 40px 20px 70px;
-      background-color: #ececec;
+      background:
+        linear-gradient(rgba(8, 5, 3, 0.82), rgba(8, 5, 3, 0.82)),
+        #120a06;
     }
 
     .court-wrap {
@@ -264,10 +266,36 @@
       width: 100%;
       aspect-ratio: 16 / 9;
       min-height: 760px;
-      background-image: url('./Cerb.png');
+      background:
+        linear-gradient(rgba(12, 7, 4, 0.58), rgba(12, 7, 4, 0.58)),
+        url('./Cerb.png');
       background-position: center center;
       background-repeat: no-repeat;
       background-size: contain;
+      filter: drop-shadow(0 16px 40px rgba(0,0,0,0.35));
+    }
+
+    .court-heading {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .court-heading h2 {
+      margin: 0 0 8px;
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #f4d9a3;
+      text-shadow:
+        0 0 12px rgba(255, 213, 120, 0.12),
+        0 2px 10px rgba(0,0,0,0.7);
+    }
+
+    .court-heading p {
+      margin: 0;
+      color: #d7b27b;
+      font-size: 1rem;
     }
 
     .match-score-box {
@@ -372,23 +400,23 @@
 
     .player-art {
       position: absolute;
-      bottom: 16%;
-      width: 18%;
-      max-width: 250px;
-      min-width: 150px;
+      bottom: 18%;
+      width: 12%;
+      max-width: 170px;
+      min-width: 110px;
       pointer-events: none;
       z-index: 2;
-      filter: drop-shadow(0 18px 30px rgba(0,0,0,0.18));
-      opacity: 0.95;
+      filter: drop-shadow(0 18px 30px rgba(0,0,0,0.28));
+      opacity: 0.9;
     }
 
     .player-art.left {
-      left: 6%;
+      left: 17%;
     }
 
     .player-art.right {
-      right: 6%;
-      transform: scaleX(-1);
+      right: 17%;
+      transform: none;
     }
 
     .player-art img {
@@ -406,13 +434,13 @@
     }
 
     .court-side-readout.left {
-      left: 15%;
+      left: 21%;
       top: 57%;
       transform: translate(-50%, -50%);
     }
 
     .court-side-readout.right {
-      right: 15%;
+      right: 21%;
       top: 57%;
       transform: translate(50%, -50%);
     }
@@ -523,13 +551,13 @@
 
     .court-ball.to-left {
       animation: bounceToLeft 1s ease;
-      left: 6.2%;
+      left: 7.4%;
       top: 50%;
     }
 
     .court-ball.to-right {
       animation: bounceToRight 1s ease;
-      left: 93.8%;
+      left: 92.6%;
       top: 50%;
     }
 
@@ -675,23 +703,23 @@
 
     @keyframes ballSuspense {
       from { transform: translate(-50%, -50%) translateY(-4px); }
-      to   { transform: translate(-50%, -50%) translateY(4px); }
+      to { transform: translate(-50%, -50%) translateY(4px); }
     }
 
     @keyframes bounceToLeft {
       0%   { left: 50%; top: 50%; }
       25%  { left: 34%; top: 43%; }
-      55%  { left: 14%; top: 56%; }
-      78%  { left: 6.2%; top: 46%; }
-      100% { left: 6.2%; top: 50%; }
+      55%  { left: 16%; top: 56%; }
+      78%  { left: 7.4%; top: 46%; }
+      100% { left: 7.4%; top: 50%; }
     }
 
     @keyframes bounceToRight {
       0%   { left: 50%; top: 50%; }
       25%  { left: 66%; top: 43%; }
-      55%  { left: 86%; top: 56%; }
-      78%  { left: 93.8%; top: 46%; }
-      100% { left: 93.8%; top: 50%; }
+      55%  { left: 84%; top: 56%; }
+      78%  { left: 92.6%; top: 46%; }
+      100% { left: 92.6%; top: 50%; }
     }
 
     @keyframes bounceCenter {
@@ -703,7 +731,7 @@
 
     @media (max-width: 1100px) {
       .player-art {
-        width: 16%;
+        width: 11%;
       }
     }
 
@@ -795,8 +823,12 @@
 
   <section class="court-section" id="court">
     <div class="court-wrap">
-      <div class="court-ui">
+      <div class="court-heading">
+        <h2>The Court of Chance</h2>
+        <p>Best of 3. Highest total wins the point.</p>
+      </div>
 
+      <div class="court-ui">
         <div class="match-score-box">
           <div class="match-score-title">Match Score</div>
           <div class="match-score-value" id="scoreDisplay">0 - 0</div>
@@ -880,7 +912,6 @@
           <button class="ptk-cta" id="playBtn" onclick="playRound()">Play Round</button>
           <button class="secondary-btn" id="resetBtn" onclick="resetMatch()">Reset Match</button>
         </div>
-
       </div>
     </div>
   </section>
@@ -899,280 +930,280 @@
   </div>
 
   <script>
-  let dmWins = 0;
-  let playerWins = 0;
-  let roundNumber = 0;
-  let matchOver = false;
-  let isRolling = false;
+    let dmWins = 0;
+    let playerWins = 0;
+    let roundNumber = 0;
+    let matchOver = false;
+    let isRolling = false;
 
-  const scoreDisplay = document.getElementById("scoreDisplay");
-  const statusDisplay = document.getElementById("statusDisplay");
-  const playerTeamNameInput = document.getElementById("playerTeamName");
-  const livePlayerName = document.getElementById("livePlayerName");
-  const courtPlayerName = document.getElementById("courtPlayerName");
-  const playerModifierInput = document.getElementById("playerModifier");
-  const historyList = document.getElementById("historyList");
-  const courtBall = document.getElementById("courtBall");
-  const dmCourtRoll = document.getElementById("dmCourtRoll");
-  const playerCourtRoll = document.getElementById("playerCourtRoll");
-  const dmCourtText = document.getElementById("dmCourtText");
-  const playerCourtText = document.getElementById("playerCourtText");
-  const dmWheel = document.getElementById("dmWheel");
-  const playerWheel = document.getElementById("playerWheel");
-  const playBtn = document.getElementById("playBtn");
-  const resetBtn = document.getElementById("resetBtn");
+    const scoreDisplay = document.getElementById("scoreDisplay");
+    const statusDisplay = document.getElementById("statusDisplay");
+    const playerTeamNameInput = document.getElementById("playerTeamName");
+    const livePlayerName = document.getElementById("livePlayerName");
+    const courtPlayerName = document.getElementById("courtPlayerName");
+    const playerModifierInput = document.getElementById("playerModifier");
+    const historyList = document.getElementById("historyList");
+    const courtBall = document.getElementById("courtBall");
+    const dmCourtRoll = document.getElementById("dmCourtRoll");
+    const playerCourtRoll = document.getElementById("playerCourtRoll");
+    const dmCourtText = document.getElementById("dmCourtText");
+    const playerCourtText = document.getElementById("playerCourtText");
+    const dmWheel = document.getElementById("dmWheel");
+    const playerWheel = document.getElementById("playerWheel");
+    const playBtn = document.getElementById("playBtn");
+    const resetBtn = document.getElementById("resetBtn");
 
-  const winnerModal = document.getElementById("winnerModal");
-  const winnerImage = document.getElementById("winnerImage");
-  const winnerTitle = document.getElementById("winnerTitle");
-  const winnerMessage = document.getElementById("winnerMessage");
+    const winnerModal = document.getElementById("winnerModal");
+    const winnerImage = document.getElementById("winnerImage");
+    const winnerTitle = document.getElementById("winnerTitle");
+    const winnerMessage = document.getElementById("winnerMessage");
 
-  const IXCHEL_WIN_IMAGE = "./ixchel-win.jpg";
-  const PLAYER_WIN_IMAGE = "./player-win.jpg";
+    const IXCHEL_WIN_IMAGE = "./ixchel-win.png";
+    const PLAYER_WIN_IMAGE = "./player-win.png";
 
-  if (playerTeamNameInput) {
     playerTeamNameInput.addEventListener("input", syncPlayerName);
-  }
 
-  function syncPlayerName() {
-    const name = playerTeamNameInput.value.trim() || "Your Team";
-    livePlayerName.textContent = name;
-    courtPlayerName.textContent = name;
-  }
-
-  function rollD20() {
-    return Math.floor(Math.random() * 20) + 1;
-  }
-
-  function applyNatColor(element, roll) {
-    element.classList.remove("nat-1", "nat-20");
-    if (roll === 1) {
-      element.classList.add("nat-1");
-    } else if (roll === 20) {
-      element.classList.add("nat-20");
-    }
-  }
-
-  function clearNatColor(element) {
-    element.classList.remove("nat-1", "nat-20");
-  }
-
-  function updateScore() {
-    scoreDisplay.textContent = `${dmWins} - ${playerWins}`;
-  }
-
-  function updateHistory(text) {
-    if (
-      historyList.children.length === 1 &&
-      historyList.children[0].textContent === "The court is quiet. Roll to begin."
-    ) {
-      historyList.innerHTML = "";
+    function syncPlayerName() {
+      const name = playerTeamNameInput.value.trim() || "Your Team";
+      livePlayerName.textContent = name;
+      courtPlayerName.textContent = name;
     }
 
-    const li = document.createElement("li");
-    li.textContent = text;
-    historyList.prepend(li);
-  }
-
-  function animateBall(resultClass) {
-    courtBall.classList.remove("to-left", "to-right", "to-center", "idle-sway");
-    void courtBall.offsetWidth;
-    courtBall.classList.add(resultClass);
-  }
-
-  function showWinnerModal(title, message, imagePath) {
-    winnerTitle.textContent = title;
-    winnerMessage.textContent = message;
-    winnerImage.src = imagePath;
-    winnerModal.classList.add("show");
-  }
-
-  function closeWinnerModal() {
-    winnerModal.classList.remove("show");
-  }
-
-  function setRollingState(active) {
-    isRolling = active;
-    playBtn.disabled = active;
-    resetBtn.disabled = active;
-
-    if (active) {
-      dmWheel.classList.add("rolling");
-      playerWheel.classList.add("rolling");
-      dmCourtRoll.classList.add("rolling");
-      playerCourtRoll.classList.add("rolling");
-      courtBall.classList.remove("to-left", "to-right", "to-center");
-      courtBall.classList.add("idle-sway");
-    } else {
-      dmWheel.classList.remove("rolling");
-      playerWheel.classList.remove("rolling");
-      dmCourtRoll.classList.remove("rolling");
-      playerCourtRoll.classList.remove("rolling");
-      courtBall.classList.remove("idle-sway");
+    function rollD20() {
+      return Math.floor(Math.random() * 20) + 1;
     }
-  }
 
-  function suspenseRoll(finalDMBase, finalPlayerBase, playerMod) {
-    return new Promise((resolve) => {
-      let ticks = 0;
-      const maxTicks = 16;
+    function applyNatColor(element, roll) {
+      element.classList.remove("nat-1", "nat-20");
+      if (roll === 1) {
+        element.classList.add("nat-1");
+      } else if (roll === 20) {
+        element.classList.add("nat-20");
+      }
+    }
+
+    function clearNatColor(element) {
+      element.classList.remove("nat-1", "nat-20");
+    }
+
+    function updateScore() {
+      scoreDisplay.textContent = `${dmWins} - ${playerWins}`;
+    }
+
+    function updateHistory(text) {
+      if (
+        historyList.children.length === 1 &&
+        historyList.children[0].textContent === "The court is quiet. Roll to begin."
+      ) {
+        historyList.innerHTML = "";
+      }
+
+      const li = document.createElement("li");
+      li.textContent = text;
+      historyList.prepend(li);
+    }
+
+    function animateBall(resultClass) {
+      courtBall.classList.remove("to-left", "to-right", "to-center", "idle-sway");
+      void courtBall.offsetWidth;
+      courtBall.classList.add(resultClass);
+    }
+
+    function showWinnerModal(title, message, imagePath) {
+      winnerTitle.textContent = title;
+      winnerMessage.textContent = message;
+      winnerImage.src = imagePath;
+      winnerModal.classList.add("show");
+    }
+
+    function closeWinnerModal() {
+      winnerModal.classList.remove("show");
+    }
+
+    function setRollingState(active) {
+      isRolling = active;
+      playBtn.disabled = active;
+      resetBtn.disabled = active;
+
+      if (active) {
+        dmWheel.classList.add("rolling");
+        playerWheel.classList.add("rolling");
+        dmCourtRoll.classList.add("rolling");
+        playerCourtRoll.classList.add("rolling");
+        courtBall.classList.remove("to-left", "to-right", "to-center");
+        courtBall.classList.add("idle-sway");
+      } else {
+        dmWheel.classList.remove("rolling");
+        playerWheel.classList.remove("rolling");
+        dmCourtRoll.classList.remove("rolling");
+        playerCourtRoll.classList.remove("rolling");
+        courtBall.classList.remove("idle-sway");
+      }
+    }
+
+    function suspenseRoll(finalDMBase, finalPlayerBase, playerMod) {
+      return new Promise((resolve) => {
+        let ticks = 0;
+        const maxTicks = 16;
+
+        clearNatColor(dmCourtRoll);
+        clearNatColor(playerCourtRoll);
+
+        dmCourtText.textContent = "Ixchel's Royal Team sizes up the court...";
+        playerCourtText.textContent = "Your side gathers itself...";
+
+        setRollingState(true);
+
+        const interval = setInterval(() => {
+          ticks++;
+
+          const tempDM = rollD20();
+          const tempPlayer = rollD20();
+
+          dmCourtRoll.textContent = tempDM + 5;
+          playerCourtRoll.textContent = tempPlayer + playerMod;
+
+          if (ticks >= maxTicks) {
+            clearInterval(interval);
+
+            setTimeout(() => {
+              const dmTotal = finalDMBase + 5;
+              const playerTotal = finalPlayerBase + playerMod;
+
+              dmCourtRoll.textContent = dmTotal;
+              playerCourtRoll.textContent = playerTotal;
+
+              applyNatColor(dmCourtRoll, finalDMBase);
+              applyNatColor(playerCourtRoll, finalPlayerBase);
+
+              dmCourtText.textContent = `Raw ${finalDMBase}, royal bonus +5`;
+              playerCourtText.textContent = `Raw ${finalPlayerBase}, modifier ${playerMod >= 0 ? "+" : ""}${playerMod}`;
+
+              setRollingState(false);
+              resolve({ dmTotal, playerTotal });
+            }, 250);
+          }
+        }, 90);
+      });
+    }
+
+    async function playRound() {
+      if (matchOver) {
+        statusDisplay.textContent = "This match is already decided. Reset to start a new best-of-3.";
+        return;
+      }
+
+      if (isRolling) {
+        return;
+      }
+
+      syncPlayerName();
+
+      const playerName = playerTeamNameInput.value.trim() || "Your Team";
+      const playerMod = parseInt(playerModifierInput.value, 10) || 0;
+
+      const dmBase = rollD20();
+      const playerBase = rollD20();
+
+      statusDisplay.textContent = "The court holds its breath...";
+
+      const { dmTotal, playerTotal } = await suspenseRoll(dmBase, playerBase, playerMod);
+
+      roundNumber += 1;
+
+      let resultText = "";
+      let ballClass = "to-center";
+
+      if (dmTotal > playerTotal) {
+        dmWins += 1;
+        resultText = `Round ${roundNumber}: Ixchel's Royal Team wins the point.`;
+        ballClass = "to-left";
+      } else if (playerTotal > dmTotal) {
+        playerWins += 1;
+        resultText = `Round ${roundNumber}: ${playerName} wins the point.`;
+        ballClass = "to-right";
+      } else {
+        resultText = `Round ${roundNumber}: Tie round. No point awarded.`;
+        ballClass = "to-center";
+      }
+
+      animateBall(ballClass);
+      updateScore();
+
+      const roundSummary = `Round ${roundNumber}: DM ${dmTotal} vs ${playerName} ${playerTotal}. ${resultText.replace(`Round ${roundNumber}: `, "")}`;
+      updateHistory(roundSummary);
+
+      if (dmWins >= 2) {
+        matchOver = true;
+        statusDisplay.textContent = "Ixchel's Royal Team wins the match.";
+        updateHistory("Match over: Ixchel's Royal Team claims the court.");
+
+        setTimeout(() => {
+          showWinnerModal(
+            "Ixchel's Royal Team Wins",
+            "The royal side has claimed the court.",
+            IXCHEL_WIN_IMAGE
+          );
+        }, 900);
+      } else if (playerWins >= 2) {
+        matchOver = true;
+        statusDisplay.textContent = `${playerName} wins the match.`;
+        updateHistory(`Match over: ${playerName} claims the court.`);
+
+        setTimeout(() => {
+          showWinnerModal(
+            `${playerName} Wins`,
+            "Your team has claimed the court.",
+            PLAYER_WIN_IMAGE
+          );
+        }, 900);
+      } else {
+        statusDisplay.textContent = resultText;
+      }
+    }
+
+    function resetMatch() {
+      dmWins = 0;
+      playerWins = 0;
+      roundNumber = 0;
+      matchOver = false;
+      isRolling = false;
+
+      dmCourtRoll.textContent = "-";
+      playerCourtRoll.textContent = "-";
 
       clearNatColor(dmCourtRoll);
       clearNatColor(playerCourtRoll);
 
-      dmCourtText.textContent = "Ixchel's Royal Team sizes up the court...";
-      playerCourtText.textContent = "Your side gathers itself...";
+      dmCourtText.textContent = "DM side awaits the first clash.";
+      playerCourtText.textContent = "Player side awaits the first clash.";
 
-      setRollingState(true);
+      scoreDisplay.textContent = "0 - 0";
+      statusDisplay.textContent = "Best of 3. First point stirs the court. Second point claims it.";
+      historyList.innerHTML = "<li>The court is quiet. Roll to begin.</li>";
 
-      const interval = setInterval(() => {
-        ticks++;
+      playBtn.disabled = false;
+      resetBtn.disabled = false;
 
-        const tempDM = rollD20();
-        const tempPlayer = rollD20();
+      dmWheel.classList.remove("rolling");
+      playerWheel.classList.remove("rolling");
+      dmCourtRoll.classList.remove("rolling");
+      playerCourtRoll.classList.remove("rolling");
 
-        dmCourtRoll.textContent = tempDM + 5;
-        playerCourtRoll.textContent = tempPlayer + playerMod;
+      courtBall.classList.remove("to-left", "to-right", "idle-sway");
+      courtBall.classList.add("to-center");
 
-        if (ticks >= maxTicks) {
-          clearInterval(interval);
+      closeWinnerModal();
+      syncPlayerName();
+    }
 
-          setTimeout(() => {
-            const dmTotal = finalDMBase + 5;
-            const playerTotal = finalPlayerBase + playerMod;
-
-            dmCourtRoll.textContent = dmTotal;
-            playerCourtRoll.textContent = playerTotal;
-
-            applyNatColor(dmCourtRoll, finalDMBase);
-            applyNatColor(playerCourtRoll, finalPlayerBase);
-
-            dmCourtText.textContent = `Raw ${finalDMBase}, royal bonus +5`;
-            playerCourtText.textContent = `Raw ${finalPlayerBase}, modifier ${playerMod >= 0 ? "+" : ""}${playerMod}`;
-
-            setRollingState(false);
-            resolve({ dmTotal, playerTotal });
-          }, 250);
-        }
-      }, 90);
+    winnerModal.addEventListener("click", function (e) {
+      if (e.target === winnerModal) {
+        resetMatch();
+      }
     });
-  }
-
-  async function playRound() {
-    if (matchOver) {
-      statusDisplay.textContent = "This match is already decided. Reset to start a new best-of-3.";
-      return;
-    }
-
-    if (isRolling) {
-      return;
-    }
 
     syncPlayerName();
-
-    const playerName = playerTeamNameInput.value.trim() || "Your Team";
-    const playerMod = parseInt(playerModifierInput.value, 10) || 0;
-
-    const dmBase = rollD20();
-    const playerBase = rollD20();
-
-    statusDisplay.textContent = "The court holds its breath...";
-
-    const { dmTotal, playerTotal } = await suspenseRoll(dmBase, playerBase, playerMod);
-
-    roundNumber += 1;
-
-    let resultText = "";
-    let ballClass = "to-center";
-
-    if (dmTotal > playerTotal) {
-      dmWins += 1;
-      resultText = `Round ${roundNumber}: Ixchel's Royal Team wins the point.`;
-      ballClass = "to-left";
-    } else if (playerTotal > dmTotal) {
-      playerWins += 1;
-      resultText = `Round ${roundNumber}: ${playerName} wins the point.`;
-      ballClass = "to-right";
-    } else {
-      resultText = `Round ${roundNumber}: Tie round. No point awarded.`;
-      ballClass = "to-center";
-    }
-
-    animateBall(ballClass);
-    updateScore();
-
-    const roundSummary = `Round ${roundNumber}: DM ${dmTotal} vs ${playerName} ${playerTotal}. ${resultText.replace(`Round ${roundNumber}: `, "")}`;
-    updateHistory(roundSummary);
-
-    if (dmWins >= 2) {
-      matchOver = true;
-      statusDisplay.textContent = "Ixchel's Royal Team wins the match.";
-      updateHistory("Match over: Ixchel's Royal Team claims the court.");
-
-      setTimeout(() => {
-        showWinnerModal(
-          "Ixchel's Royal Team Wins",
-          "The royal side has claimed the court.",
-          IXCHEL_WIN_IMAGE
-        );
-      }, 900);
-    } else if (playerWins >= 2) {
-      matchOver = true;
-      statusDisplay.textContent = `${playerName} wins the match.`;
-      updateHistory(`Match over: ${playerName} claims the court.`);
-
-      setTimeout(() => {
-        showWinnerModal(
-          `${playerName} Wins`,
-          "Your team has claimed the court.",
-          PLAYER_WIN_IMAGE
-        );
-      }, 900);
-    } else {
-      statusDisplay.textContent = resultText;
-    }
-  }
-
-  function resetMatch() {
-    dmWins = 0;
-    playerWins = 0;
-    roundNumber = 0;
-    matchOver = false;
-    isRolling = false;
-
-    dmCourtRoll.textContent = "-";
-    playerCourtRoll.textContent = "-";
-
-    clearNatColor(dmCourtRoll);
-    clearNatColor(playerCourtRoll);
-
-    dmCourtText.textContent = "DM side awaits the first clash.";
-    playerCourtText.textContent = "Player side awaits the first clash.";
-
-    scoreDisplay.textContent = "0 - 0";
-    statusDisplay.textContent = "Best of 3. First point stirs the court. Second point claims it.";
-    historyList.innerHTML = "<li>The court is quiet. Roll to begin.</li>";
-
-    playBtn.disabled = false;
-    resetBtn.disabled = false;
-
-    dmWheel.classList.remove("rolling");
-    playerWheel.classList.remove("rolling");
-    dmCourtRoll.classList.remove("rolling");
-    playerCourtRoll.classList.remove("rolling");
-
-    courtBall.classList.remove("to-left", "to-right", "idle-sway");
-    courtBall.classList.add("to-center");
-
-    closeWinnerModal();
-    syncPlayerName();
-  }
-
-  winnerModal.addEventListener("click", function (e) {
-    if (e.target === winnerModal) {
-      resetMatch();
-    }
-  });
-
-  syncPlayerName();
-</script>
+  </script>
+</body>
+</html>
