@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tayrealm Dice Oracle</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Fondamento&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Fondamento', cursive;
+  color: white;
+  text-align: center;
+  background: linear-gradient(to bottom, #1a1a2e, #0f0f1a);
+}
+
+.container {
+  margin-top: 15vh;
+}
+
+h1 {
+  font-size: 3rem;
+  text-shadow: 2px 2px 8px black;
+}
+
+input {
+  padding: 10px;
+  font-size: 1.2rem;
+  width: 80px;
+  margin: 10px;
+  border-radius: 10px;
+  border: none;
+}
+
+button {
+  padding: 12px 20px;
+  font-size: 1.2rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  background: #6b3fa0;
+  color: white;
+}
+
+.result {
+  font-size: 3rem;
+  margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>The Dice of Tayrealm</h1>
+
+  <p>Choose your range:</p>
+  <input id="min" type="number" placeholder="Min">
+  <input id="max" type="number" placeholder="Max">
+  <br>
+
+  <button onclick="roll()">Roll Fate</button>
+
+  <div class="result" id="result">?</div>
+</div>
+
+<script>
+function roll() {
+  let min = parseInt(document.getElementById("min").value);
+  let max = parseInt(document.getElementById("max").value);
+
+  if (isNaN(min) || isNaN(max) || min >= max) {
+    document.getElementById("result").textContent = "Invalid range";
+    return;
+  }
+
+  let num = Math.floor(Math.random() * (max - min + 1)) + min;
+  document.getElementById("result").textContent = num;
+}
+</script>
+
+</body>
+</html>
