@@ -181,7 +181,8 @@
 
     .ptk-cta,
     .secondary-btn,
-    .modal-btn {
+    .modal-btn,
+    .setup-enter-btn {
       display: inline-block;
       margin-top: 8px;
       padding: 14px 30px;
@@ -203,7 +204,8 @@
 
     .ptk-cta:hover,
     .secondary-btn:hover,
-    .modal-btn:hover {
+    .modal-btn:hover,
+    .setup-enter-btn:hover {
       transform: translateY(-1px) scale(1.02);
       filter: brightness(1.06);
       box-shadow:
@@ -213,7 +215,8 @@
 
     .ptk-cta:disabled,
     .secondary-btn:disabled,
-    .modal-btn:disabled {
+    .modal-btn:disabled,
+    .setup-enter-btn:disabled {
       opacity: 0.65;
       cursor: not-allowed;
       transform: none;
@@ -235,14 +238,6 @@
       align-items: center;
       gap: 8px;
       opacity: 0.85;
-    }
-
-    .ptk-scroll-text {
-      font-family: 'Cinzel', serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: #e1c189;
     }
 
     .ptk-scroll-line {
@@ -370,12 +365,7 @@
       color: #fff0d1;
       margin-bottom: 8px;
       text-transform: uppercase;
-    }
-
-    .team-sub {
-      font-size: 1rem;
-      color: #f2e3c3;
-      margin-bottom: 12px;
+      text-align: center;
     }
 
     .team-stat {
@@ -383,6 +373,7 @@
       font-family: 'Cinzel', serif;
       font-size: 1rem;
       margin-top: 6px;
+      text-align: left;
     }
 
     .court-roll-area {
@@ -417,6 +408,10 @@
       height: auto;
       display: block;
       object-fit: contain;
+    }
+
+    .player-art.bouncing {
+      animation: playerBounce 0.45s ease-in-out infinite alternate;
     }
 
     .court-side-readout {
@@ -693,6 +688,12 @@
       box-shadow: 0 0 0 3px rgba(255, 214, 140, 0.15);
     }
 
+    .setup-actions {
+      margin-top: 18px;
+      display: flex;
+      justify-content: center;
+    }
+
     .setup-hint {
       margin-top: 14px;
       color: #d7b27b;
@@ -725,6 +726,11 @@
     @keyframes ballSuspense {
       from { transform: translate(-50%, -50%) translateY(-4px); }
       to { transform: translate(-50%, -50%) translateY(4px); }
+    }
+
+    @keyframes playerBounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-12px); }
     }
 
     @keyframes bounceToLeft {
@@ -871,11 +877,11 @@
         </div>
 
         <div class="court-roll-area">
-          <div class="player-art left" aria-hidden="true">
+          <div class="player-art left" id="leftPlayerArt" aria-hidden="true">
             <img src="./ixchel-player.png" alt="">
           </div>
 
-          <div class="player-art right" aria-hidden="true">
+          <div class="player-art right" id="rightPlayerArt" aria-hidden="true">
             <img src="./player-side.png" alt="">
           </div>
 
@@ -945,7 +951,11 @@
           >
         </div>
 
-        <div class="setup-hint">Press Enter to begin.</div>
+        <div class="setup-actions">
+          <button class="setup-enter-btn" id="setupEnterBtn" type="button">Enter</button>
+        </div>
+
+        <div class="setup-hint">Press Enter or click Enter to begin.</div>
       </div>
     </div>
   </div>
@@ -976,6 +986,7 @@
     const setupModal = document.getElementById("setupModal");
     const setupTeamName = document.getElementById("setupTeamName");
     const setupDexMod = document.getElementById("setupDexMod");
+    const setupEnterBtn = document.getElementById("setupEnterBtn");
 
     const scoreDisplay = document.getElementById("scoreDisplay");
     const statusDisplay = document.getElementById("statusDisplay");
@@ -991,6 +1002,8 @@
     const playerWheel = document.getElementById("playerWheel");
     const playBtn = document.getElementById("playBtn");
     const resetBtn = document.getElementById("resetBtn");
+    const leftPlayerArt = document.getElementById("leftPlayerArt");
+    const rightPlayerArt = document.getElementById("rightPlayerArt");
 
     const winnerModal = document.getElementById("winnerModal");
     const winnerImage = document.getElementById("winnerImage");
@@ -1047,6 +1060,7 @@
     }
 
     enterCourtBtn.addEventListener("click", unlockCourtAndEnter);
+    setupEnterBtn.addEventListener("click", lockSetup);
 
     setupTeamName.addEventListener("keydown", function(e) {
       if (e.key === "Enter") {
@@ -1125,12 +1139,16 @@
         playerCourtRoll.classList.add("rolling");
         courtBall.classList.remove("to-left", "to-right", "to-center");
         courtBall.classList.add("idle-sway");
+        leftPlayerArt.classList.add("bouncing");
+        rightPlayerArt.classList.add("bouncing");
       } else {
         dmWheel.classList.remove("rolling");
         playerWheel.classList.remove("rolling");
         dmCourtRoll.classList.remove("rolling");
         playerCourtRoll.classList.remove("rolling");
         courtBall.classList.remove("idle-sway");
+        leftPlayerArt.classList.remove("bouncing");
+        rightPlayerArt.classList.remove("bouncing");
       }
     }
 
@@ -1267,7 +1285,6 @@
       roundNumber = 0;
       matchOver = false;
       isRolling = false;
-      setupLocked = false;
 
       dmCourtRoll.textContent = "-";
       playerCourtRoll.textContent = "-";
@@ -1279,7 +1296,7 @@
       playerCourtText.textContent = "Player side awaits the first clash.";
 
       scoreDisplay.textContent = "0 - 0";
-      statusDisplay.textContent = "Enter your team name and dex modifier before playing.";
+      statusDisplay.textContent = "The court is ready. Play Round to begin.";
       historyList.innerHTML = "<li>The court is quiet. Roll to begin.</li>";
 
       playBtn.disabled = false;
@@ -1293,14 +1310,11 @@
       courtBall.classList.remove("to-left", "to-right", "idle-sway");
       courtBall.classList.add("to-center");
 
-      setupTeamName.value = "";
-      setupDexMod.value = "";
+      leftPlayerArt.classList.remove("bouncing");
+      rightPlayerArt.classList.remove("bouncing");
 
-      livePlayerName.textContent = "Your Team";
-      playerDexDisplay.textContent = "Dex Mod: +0";
-
+      syncPlayerProfile();
       closeWinnerModal();
-      openSetupModal();
     }
 
     winnerModal.addEventListener("click", function (e) {
