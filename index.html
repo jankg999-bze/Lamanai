@@ -959,6 +959,12 @@
     const PLAYER_WIN_IMAGE = "./player-win.jpg";
 
     playerTeamNameInput.addEventListener("input", syncPlayerName);
+    playerTeamNameInput.addEventListener("keydown", function(e) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    lockPlayerName();
+  }
+});
 
     function syncPlayerName() {
       const name = playerTeamNameInput.value.trim() || "Your Team";
