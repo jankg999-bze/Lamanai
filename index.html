@@ -261,20 +261,6 @@
       margin: 0 auto;
     }
 
-    .court-ui {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      min-height: 760px;
-      background:
-        linear-gradient(rgba(12, 7, 4, 0.68), rgba(12, 7, 4, 0.68)),
-        url('./Cerb.png');
-      background-position: center center;
-      background-repeat: no-repeat;
-      background-size: contain;
-      filter: drop-shadow(0 16px 40px rgba(0,0,0,0.35));
-    }
-
     .court-heading {
       text-align: center;
       margin-bottom: 18px;
@@ -296,6 +282,20 @@
       margin: 0;
       color: #d7b27b;
       font-size: 1rem;
+    }
+
+    .court-ui {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      min-height: 760px;
+      background:
+        linear-gradient(rgba(12, 7, 4, 0.68), rgba(12, 7, 4, 0.68)),
+        url('./Cerb.png');
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: contain;
+      filter: drop-shadow(0 16px 40px rgba(0,0,0,0.35));
     }
 
     .match-score-box {
@@ -443,15 +443,6 @@
       right: 21%;
       top: 57%;
       transform: translate(50%, -50%);
-    }
-
-    .side-title {
-      font-family: 'Cinzel', serif;
-      font-size: 1.8rem;
-      color: #fff0d1;
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      text-shadow: 0 3px 10px rgba(0,0,0,0.35);
     }
 
     .side-roll-wrap {
@@ -710,16 +701,16 @@
       0%   { left: 50%; top: 50%; }
       25%  { left: 34%; top: 43%; }
       55%  { left: 16%; top: 56%; }
-      78%  { left: 7.4%; top: 46%; }
-      100% { left: 7.4%; top: 50%; }
+      78%  { left: 7.8%; top: 46%; }
+      100% { left: 7.8%; top: 50%; }
     }
 
     @keyframes bounceToRight {
       0%   { left: 50%; top: 50%; }
       25%  { left: 66%; top: 43%; }
       55%  { left: 84%; top: 56%; }
-      78%  { left: 92.6%; top: 46%; }
-      100% { left: 92.6%; top: 50%; }
+      78%  { left: 92.2%; top: 46%; }
+      100% { left: 92.2%; top: 50%; }
     }
 
     @keyframes bounceCenter {
@@ -869,7 +860,7 @@
           </div>
 
           <div class="court-side-readout left">
-              <div class="side-roll-wrap">
+            <div class="side-roll-wrap">
               <div class="roll-wheel" id="dmWheel"></div>
               <div class="side-roll" id="dmCourtRoll">-</div>
             </div>
@@ -877,7 +868,7 @@
           </div>
 
           <div class="court-side-readout right">
-              <div class="side-roll-wrap">
+            <div class="side-roll-wrap">
               <div class="roll-wheel" id="playerWheel"></div>
               <div class="side-roll" id="playerCourtRoll">-</div>
             </div>
@@ -938,7 +929,6 @@
     const statusDisplay = document.getElementById("statusDisplay");
     const playerTeamNameInput = document.getElementById("playerTeamName");
     const livePlayerName = document.getElementById("livePlayerName");
-    const courtPlayerName = document.getElementById("courtPlayerName");
     const playerModifierInput = document.getElementById("playerModifier");
     const historyList = document.getElementById("historyList");
     const courtBall = document.getElementById("courtBall");
@@ -964,7 +954,6 @@
     function syncPlayerName() {
       const name = playerTeamNameInput.value.trim() || "Your Team";
       livePlayerName.textContent = name;
-      courtPlayerName.textContent = name;
     }
 
     function rollD20() {
