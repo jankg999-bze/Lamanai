@@ -24,6 +24,11 @@
       overflow-x: hidden;
     }
 
+    body.lock-home {
+      overflow: hidden;
+      height: 100vh;
+    }
+
     :root {
       --gold-1: #fff0c8;
       --gold-2: #e6c27a;
@@ -340,13 +345,13 @@
       position: absolute;
       width: 310px;
       min-height: 190px;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  padding: 22px 22px 18px;
-  backdrop-filter: blur(5px);
-  box-shadow: 0 10px 35px rgba(0,0,0,0.28);
-  z-index: 8;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 22px 22px 18px;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 10px 35px rgba(0,0,0,0.28);
+      z-index: 8;
     }
 
     .team-panel.left {
@@ -367,36 +372,17 @@
       text-transform: uppercase;
     }
 
-    .saved-player-name {
-  margin-bottom: 12px;
-  color: #f4d9a3;
-  font-family: 'Cinzel', serif;
-  font-size: 1rem;
-}
     .team-sub {
       font-size: 1rem;
       color: #f2e3c3;
-      margin-bottom: 18px;
-    }
-
-    .player-name-input,
-    .modifier-input {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(233, 202, 142, 0.24);
-      background: rgba(255,255,255,0.94);
-      color: #2a170c;
-      font-size: 1rem;
-      font-family: 'Cinzel', serif;
       margin-bottom: 12px;
     }
 
-    .player-name-input:focus,
-    .modifier-input:focus {
-      outline: none;
-      border-color: rgba(255, 214, 140, 0.75);
-      box-shadow: 0 0 0 3px rgba(255, 214, 140, 0.15);
+    .team-stat {
+      color: #f4d9a3;
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      margin-top: 6px;
     }
 
     .court-roll-area {
@@ -616,7 +602,8 @@
       z-index: 8;
     }
 
-    .winner-modal {
+    .winner-modal,
+    .setup-modal {
       position: fixed;
       inset: 0;
       background: rgba(10, 6, 4, 0.72);
@@ -627,11 +614,13 @@
       z-index: 999;
     }
 
-    .winner-modal.show {
+    .winner-modal.show,
+    .setup-modal.show {
       display: flex;
     }
 
-    .winner-card {
+    .winner-card,
+    .setup-card {
       width: min(720px, 96vw);
       background: rgba(22, 12, 7, 0.92);
       border: 1px solid rgba(255, 225, 172, 0.28);
@@ -657,12 +646,14 @@
       display: block;
     }
 
-    .winner-content {
+    .winner-content,
+    .setup-content {
       padding: 22px 24px 26px;
       text-align: center;
     }
 
-    .winner-content h3 {
+    .winner-content h3,
+    .setup-content h3 {
       margin: 0 0 10px;
       font-family: 'Cinzel', serif;
       font-size: clamp(1.6rem, 3vw, 2.4rem);
@@ -670,10 +661,42 @@
       color: #f4d9a3;
     }
 
-    .winner-content p {
+    .winner-content p,
+    .setup-content p {
       margin: 0 0 18px;
       font-size: 1.1rem;
       color: #f4e7cf;
+    }
+
+    .setup-fields {
+      max-width: 360px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .setup-fields input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(233, 202, 142, 0.24);
+      background: rgba(255,255,255,0.94);
+      color: #2a170c;
+      font-size: 1rem;
+      font-family: 'Cinzel', serif;
+    }
+
+    .setup-fields input:focus {
+      outline: none;
+      border-color: rgba(255, 214, 140, 0.75);
+      box-shadow: 0 0 0 3px rgba(255, 214, 140, 0.15);
+    }
+
+    .setup-hint {
+      margin-top: 14px;
+      color: #d7b27b;
+      font-size: 0.95rem;
     }
 
     @keyframes drift {
@@ -734,6 +757,11 @@
     }
 
     @media (max-width: 900px) {
+      body.lock-home {
+        overflow: hidden;
+        height: 100vh;
+      }
+
       .court-ui {
         aspect-ratio: auto;
         min-height: auto;
@@ -779,7 +807,7 @@
     }
   </style>
 </head>
-<body>
+<body class="lock-home">
   <div class="ptk-site">
     <section class="ptk-hero">
       <div class="ptk-hero-bg" aria-hidden="true">
@@ -809,7 +837,7 @@
         </h1>
 
         <p class="ptk-hero-sub">Do you have what it takes?</p>
-        <a class="ptk-cta" href="#court">Enter the Court</a>
+        <button class="ptk-cta" id="enterCourtBtn">Enter the Court</button>
       </div>
 
       <div class="ptk-hero-scroll" aria-hidden="true">
@@ -836,25 +864,13 @@
         <div class="team-panel left">
           <div class="team-name">Ixchel's Royal Team</div>
           <div class="team-sub">The DM rolls 1d20 and always gains +5.</div>
+          <div class="team-stat">Dex Mod: +5</div>
         </div>
 
         <div class="team-panel right">
-  <div class="team-name" id="livePlayerName">Your Team</div>
-  <div class="team-sub">Type in your team name and hit enter to save.</div>
-  <div id="savedPlayerName" class="saved-player-name" style="display:none;"></div>
-  <input
-    class="player-name-input"
-    id="playerTeamName"
-    type="text"
-    maxlength="30"
-    placeholder="Enter your team name"
-  >
-          <input
-            class="modifier-input"
-            id="playerModifier"
-            type="number"
-            placeholder="Dex modifier"
-          >
+          <div class="team-name" id="livePlayerName">Your Team</div>
+          <div class="team-sub">Player profile locked before the match begins.</div>
+          <div class="team-stat" id="playerDexDisplay">Dex Mod: +0</div>
         </div>
 
         <div class="court-roll-area">
@@ -912,6 +928,31 @@
     </div>
   </section>
 
+  <div class="setup-modal" id="setupModal">
+    <div class="setup-card">
+      <div class="setup-content">
+        <h3>Enter the Court</h3>
+        <p>Choose your team name and dex modifier before the match begins.</p>
+
+        <div class="setup-fields">
+          <input
+            id="setupTeamName"
+            type="text"
+            maxlength="30"
+            placeholder="Enter your team name"
+          >
+          <input
+            id="setupDexMod"
+            type="number"
+            placeholder="Dex mod"
+          >
+        </div>
+
+        <div class="setup-hint">Press Enter to begin.</div>
+      </div>
+    </div>
+  </div>
+
   <div class="winner-modal" id="winnerModal">
     <div class="winner-card">
       <div class="winner-image-wrap">
@@ -931,13 +972,18 @@
     let roundNumber = 0;
     let matchOver = false;
     let isRolling = false;
+    let setupLocked = false;
+
+    const bodyEl = document.body;
+    const enterCourtBtn = document.getElementById("enterCourtBtn");
+    const setupModal = document.getElementById("setupModal");
+    const setupTeamName = document.getElementById("setupTeamName");
+    const setupDexMod = document.getElementById("setupDexMod");
 
     const scoreDisplay = document.getElementById("scoreDisplay");
     const statusDisplay = document.getElementById("statusDisplay");
-    const playerTeamNameInput = document.getElementById("playerTeamName");
     const livePlayerName = document.getElementById("livePlayerName");
-    const savedPlayerName = document.getElementById("savedPlayerName");
-    const playerModifierInput = document.getElementById("playerModifier");
+    const playerDexDisplay = document.getElementById("playerDexDisplay");
     const historyList = document.getElementById("historyList");
     const courtBall = document.getElementById("courtBall");
     const dmCourtRoll = document.getElementById("dmCourtRoll");
@@ -957,18 +1003,67 @@
     const IXCHEL_WIN_IMAGE = "./ixchel-win.jpg";
     const PLAYER_WIN_IMAGE = "./player-win.jpg";
 
-    playerTeamNameInput.addEventListener("input", syncPlayerName);
-    playerTeamNameInput.addEventListener("keydown", function(e) {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    lockPlayerName();
-  }
-});
-
-    function syncPlayerName() {
-      const name = playerTeamNameInput.value.trim() || "Your Team";
-      livePlayerName.textContent = name;
+    function getPlayerName() {
+      return setupTeamName.value.trim() || "Your Team";
     }
+
+    function getPlayerMod() {
+      return parseInt(setupDexMod.value, 10) || 0;
+    }
+
+    function syncPlayerProfile() {
+      const name = getPlayerName();
+      const mod = getPlayerMod();
+      livePlayerName.textContent = name;
+      playerDexDisplay.textContent = `Dex Mod: ${mod >= 0 ? "+" : ""}${mod}`;
+    }
+
+    function openSetupModal() {
+      setupModal.classList.add("show");
+      setTimeout(() => setupTeamName.focus(), 30);
+    }
+
+    function closeSetupModal() {
+      setupModal.classList.remove("show");
+    }
+
+    function unlockCourtAndEnter() {
+      bodyEl.classList.remove("lock-home");
+      document.getElementById("court").scrollIntoView({ behavior: "smooth" });
+      setTimeout(() => {
+        openSetupModal();
+      }, 650);
+    }
+
+    function lockSetup() {
+      const name = setupTeamName.value.trim();
+      if (!name) {
+        statusDisplay.textContent = "Enter your team name before starting the match.";
+        setupTeamName.focus();
+        return;
+      }
+
+      syncPlayerProfile();
+      setupLocked = true;
+      closeSetupModal();
+      statusDisplay.textContent = "The court is ready. Play Round to begin.";
+    }
+
+    enterCourtBtn.addEventListener("click", unlockCourtAndEnter);
+
+    setupTeamName.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        lockSetup();
+      }
+    });
+
+    setupDexMod.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        lockSetup();
+      }
+    });
 
     function rollD20() {
       return Math.floor(Math.random() * 20) + 1;
@@ -1088,96 +1183,86 @@
       });
     }
 
-
-    function lockPlayerName() {
-  const name = playerTeamNameInput.value.trim() || "Your Team";
-  livePlayerName.textContent = name;
-  savedPlayerName.textContent = `Team Name: ${name}`;
-  savedPlayerName.style.display = "block";
-  playerTeamNameInput.style.display = "none";
-}
-    
     async function playRound() {
-  if (matchOver) {
-    statusDisplay.textContent = "This match is already decided. Reset to start a new best-of-3.";
-    return;
-  }
+      if (!setupLocked) {
+        statusDisplay.textContent = "Enter your team name and dex modifier before playing.";
+        openSetupModal();
+        return;
+      }
 
-  if (isRolling) {
-    return;
-  }
+      if (matchOver) {
+        statusDisplay.textContent = "This match is already decided. Reset to start a new best-of-3.";
+        return;
+      }
 
-  const playerName = playerTeamNameInput.value.trim();
+      if (isRolling) {
+        return;
+      }
 
-  if (!playerName) {
-    statusDisplay.textContent = "Enter your team name before starting the match.";
-    playerTeamNameInput.focus();
-    return;
-  }
+      syncPlayerProfile();
 
-  syncPlayerName();
+      const playerName = getPlayerName();
+      const playerMod = getPlayerMod();
 
-  const playerMod = parseInt(playerModifierInput.value, 10) || 0;
+      const dmBase = rollD20();
+      const playerBase = rollD20();
 
-  const dmBase = rollD20();
-  const playerBase = rollD20();
+      statusDisplay.textContent = "The court holds its breath...";
 
-  statusDisplay.textContent = "The court holds its breath...";
+      const { dmTotal, playerTotal } = await suspenseRoll(dmBase, playerBase, playerMod);
 
-  const { dmTotal, playerTotal } = await suspenseRoll(dmBase, playerBase, playerMod);
+      roundNumber += 1;
 
-  roundNumber += 1;
+      let resultText = "";
+      let ballClass = "to-center";
 
-  let resultText = "";
-  let ballClass = "to-center";
+      if (dmTotal > playerTotal) {
+        dmWins += 1;
+        resultText = `Round ${roundNumber}: Ixchel's Royal Team wins the point.`;
+        ballClass = "to-left";
+      } else if (playerTotal > dmTotal) {
+        playerWins += 1;
+        resultText = `Round ${roundNumber}: ${playerName} wins the point.`;
+        ballClass = "to-right";
+      } else {
+        resultText = `Round ${roundNumber}: Tie round. No point awarded.`;
+        ballClass = "to-center";
+      }
 
-  if (dmTotal > playerTotal) {
-    dmWins += 1;
-    resultText = `Round ${roundNumber}: Ixchel's Royal Team wins the point.`;
-    ballClass = "to-left";
-  } else if (playerTotal > dmTotal) {
-    playerWins += 1;
-    resultText = `Round ${roundNumber}: ${playerName} wins the point.`;
-    ballClass = "to-right";
-  } else {
-    resultText = `Round ${roundNumber}: Tie round. No point awarded.`;
-    ballClass = "to-center";
-  }
+      animateBall(ballClass);
+      updateScore();
 
-  animateBall(ballClass);
-  updateScore();
+      const roundSummary = `Round ${roundNumber}: DM ${dmTotal} vs ${playerName} ${playerTotal}. ${resultText.replace(`Round ${roundNumber}: `, "")}`;
+      updateHistory(roundSummary);
 
-  const roundSummary = `Round ${roundNumber}: DM ${dmTotal} vs ${playerName} ${playerTotal}. ${resultText.replace(`Round ${roundNumber}: `, "")}`;
-  updateHistory(roundSummary);
+      if (dmWins >= 2) {
+        matchOver = true;
+        statusDisplay.textContent = "Ixchel's Royal Team wins the match.";
+        updateHistory("Match over: Ixchel's Royal Team claims the court.");
 
-  if (dmWins >= 2) {
-    matchOver = true;
-    statusDisplay.textContent = "Ixchel's Royal Team wins the match.";
-    updateHistory("Match over: Ixchel's Royal Team claims the court.");
+        setTimeout(() => {
+          showWinnerModal(
+            "Ixchel's Royal Team Wins",
+            "The royal side has claimed the court.",
+            IXCHEL_WIN_IMAGE
+          );
+        }, 900);
+      } else if (playerWins >= 2) {
+        matchOver = true;
+        statusDisplay.textContent = `${playerName} wins the match.`;
+        updateHistory(`Match over: ${playerName} claims the court.`);
 
-    setTimeout(() => {
-      showWinnerModal(
-        "Ixchel's Royal Team Wins",
-        "The royal side has claimed the court.",
-        IXCHEL_WIN_IMAGE
-      );
-    }, 900);
-  } else if (playerWins >= 2) {
-    matchOver = true;
-    statusDisplay.textContent = `${playerName} wins the match.`;
-    updateHistory(`Match over: ${playerName} claims the court.`);
-
-    setTimeout(() => {
-      showWinnerModal(
-        `${playerName} Wins`,
-        "Your team has claimed the court.",
-        PLAYER_WIN_IMAGE
-      );
-    }, 900);
-  } else {
-    statusDisplay.textContent = resultText;
-  }
-}
+        setTimeout(() => {
+          showWinnerModal(
+            `${playerName} Wins`,
+            "Your team has claimed the court.",
+            PLAYER_WIN_IMAGE
+          );
+        }, 900);
+      } else {
+        statusDisplay.textContent = resultText;
+      }
+    }
 
     function resetMatch() {
       dmWins = 0;
@@ -1185,6 +1270,7 @@
       roundNumber = 0;
       matchOver = false;
       isRolling = false;
+      setupLocked = false;
 
       dmCourtRoll.textContent = "-";
       playerCourtRoll.textContent = "-";
@@ -1196,7 +1282,7 @@
       playerCourtText.textContent = "Player side awaits the first clash.";
 
       scoreDisplay.textContent = "0 - 0";
-      statusDisplay.textContent = "Best of 3. First point stirs the court. Second point claims it.";
+      statusDisplay.textContent = "Enter your team name and dex modifier before playing.";
       historyList.innerHTML = "<li>The court is quiet. Roll to begin.</li>";
 
       playBtn.disabled = false;
@@ -1210,14 +1296,14 @@
       courtBall.classList.remove("to-left", "to-right", "idle-sway");
       courtBall.classList.add("to-center");
 
-      savedPlayerName.style.display = "none";
-savedPlayerName.textContent = "";
-playerTeamNameInput.style.display = "block";
-playerTeamNameInput.value = "";
+      setupTeamName.value = "";
+      setupDexMod.value = "";
 
-      
+      livePlayerName.textContent = "Your Team";
+      playerDexDisplay.textContent = "Dex Mod: +0";
+
       closeWinnerModal();
-      syncPlayerName();
+      openSetupModal();
     }
 
     winnerModal.addEventListener("click", function (e) {
@@ -1226,7 +1312,7 @@ playerTeamNameInput.value = "";
       }
     });
 
-    syncPlayerName();
+    syncPlayerProfile();
   </script>
 </body>
 </html>
