@@ -1089,6 +1089,15 @@
       });
     }
 
+
+    function lockPlayerName() {
+  const name = playerTeamNameInput.value.trim() || "Your Team";
+  livePlayerName.textContent = name;
+  savedPlayerName.textContent = `Team Name: ${name}`;
+  savedPlayerName.style.display = "block";
+  playerTeamNameInput.style.display = "none";
+}
+    
     async function playRound() {
       if (matchOver) {
         statusDisplay.textContent = "This match is already decided. Reset to start a new best-of-3.";
