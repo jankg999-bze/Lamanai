@@ -1099,79 +1099,86 @@
 }
     
     async function playRound() {
-      if (matchOver) {
-        statusDisplay.textContent = "This match is already decided. Reset to start a new best-of-3.";
-        return;
-      }
+  if (matchOver) {
+    statusDisplay.textContent = "This match is already decided. Reset to start a new best-of-3.";
+    return;
+  }
 
-      if (isRolling) {
-        return;
-      }
+  if (isRolling) {
+    return;
+  }
 
-      syncPlayerName();
+  const playerName = playerTeamNameInput.value.trim();
 
-      const playerName = playerTeamNameInput.value.trim() || "Your Team";
-      const playerMod = parseInt(playerModifierInput.value, 10) || 0;
+  if (!playerName) {
+    statusDisplay.textContent = "Enter your team name before starting the match.";
+    playerTeamNameInput.focus();
+    return;
+  }
 
-      const dmBase = rollD20();
-      const playerBase = rollD20();
+  syncPlayerName();
 
-      statusDisplay.textContent = "The court holds its breath...";
+  const playerMod = parseInt(playerModifierInput.value, 10) || 0;
 
-      const { dmTotal, playerTotal } = await suspenseRoll(dmBase, playerBase, playerMod);
+  const dmBase = rollD20();
+  const playerBase = rollD20();
 
-      roundNumber += 1;
+  statusDisplay.textContent = "The court holds its breath...";
 
-      let resultText = "";
-      let ballClass = "to-center";
+  const { dmTotal, playerTotal } = await suspenseRoll(dmBase, playerBase, playerMod);
 
-      if (dmTotal > playerTotal) {
-        dmWins += 1;
-        resultText = `Round ${roundNumber}: Ixchel's Royal Team wins the point.`;
-        ballClass = "to-left";
-      } else if (playerTotal > dmTotal) {
-        playerWins += 1;
-        resultText = `Round ${roundNumber}: ${playerName} wins the point.`;
-        ballClass = "to-right";
-      } else {
-        resultText = `Round ${roundNumber}: Tie round. No point awarded.`;
-        ballClass = "to-center";
-      }
+  roundNumber += 1;
 
-      animateBall(ballClass);
-      updateScore();
+  let resultText = "";
+  let ballClass = "to-center";
 
-      const roundSummary = `Round ${roundNumber}: DM ${dmTotal} vs ${playerName} ${playerTotal}. ${resultText.replace(`Round ${roundNumber}: `, "")}`;
-      updateHistory(roundSummary);
+  if (dmTotal > playerTotal) {
+    dmWins += 1;
+    resultText = `Round ${roundNumber}: Ixchel's Royal Team wins the point.`;
+    ballClass = "to-left";
+  } else if (playerTotal > dmTotal) {
+    playerWins += 1;
+    resultText = `Round ${roundNumber}: ${playerName} wins the point.`;
+    ballClass = "to-right";
+  } else {
+    resultText = `Round ${roundNumber}: Tie round. No point awarded.`;
+    ballClass = "to-center";
+  }
 
-      if (dmWins >= 2) {
-        matchOver = true;
-        statusDisplay.textContent = "Ixchel's Royal Team wins the match.";
-        updateHistory("Match over: Ixchel's Royal Team claims the court.");
+  animateBall(ballClass);
+  updateScore();
 
-        setTimeout(() => {
-          showWinnerModal(
-            "Ixchel's Royal Team Wins",
-            "The royal side has claimed the court.",
-            IXCHEL_WIN_IMAGE
-          );
-        }, 900);
-      } else if (playerWins >= 2) {
-        matchOver = true;
-        statusDisplay.textContent = `${playerName} wins the match.`;
-        updateHistory(`Match over: ${playerName} claims the court.`);
+  const roundSummary = `Round ${roundNumber}: DM ${dmTotal} vs ${playerName} ${playerTotal}. ${resultText.replace(`Round ${roundNumber}: `, "")}`;
+  updateHistory(roundSummary);
 
-        setTimeout(() => {
-          showWinnerModal(
-            `${playerName} Wins`,
-            "Your team has claimed the court.",
-            PLAYER_WIN_IMAGE
-          );
-        }, 900);
-      } else {
-        statusDisplay.textContent = resultText;
-      }
-    }
+  if (dmWins >= 2) {
+    matchOver = true;
+    statusDisplay.textContent = "Ixchel's Royal Team wins the match.";
+    updateHistory("Match over: Ixchel's Royal Team claims the court.");
+
+    setTimeout(() => {
+      showWinnerModal(
+        "Ixchel's Royal Team Wins",
+        "The royal side has claimed the court.",
+        IXCHEL_WIN_IMAGE
+      );
+    }, 900);
+  } else if (playerWins >= 2) {
+    matchOver = true;
+    statusDisplay.textContent = `${playerName} wins the match.`;
+    updateHistory(`Match over: ${playerName} claims the court.`);
+
+    setTimeout(() => {
+      showWinnerModal(
+        `${playerName} Wins`,
+        "Your team has claimed the court.",
+        PLAYER_WIN_IMAGE
+      );
+    }, 900);
+  } else {
+    statusDisplay.textContent = resultText;
+  }
+}
 
     function resetMatch() {
       dmWins = 0;
