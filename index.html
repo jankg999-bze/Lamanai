@@ -1204,6 +1204,12 @@
       courtBall.classList.remove("to-left", "to-right", "idle-sway");
       courtBall.classList.add("to-center");
 
+      savedPlayerName.style.display = "none";
+savedPlayerName.textContent = "";
+playerTeamNameInput.style.display = "block";
+playerTeamNameInput.value = "";
+
+      
       closeWinnerModal();
       syncPlayerName();
     }
